@@ -1,8 +1,9 @@
 import { StyleSheet } from 'react-native';
+import { primary, highlight } from '../colors'
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "red",
+    backgroundColor: highlight,
     paddingTop: 15,
     paddingBottom: 15
   }
