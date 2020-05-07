@@ -2,7 +2,13 @@
 import React from 'react';
 import { Text, View, TouchableOpacity } from 'react-native';
 
-const FeedScreen = (props) => {
+interface IFeedScreenProps {
+  navigation: {
+    navigate: (arg: string) => void;
+  }
+}
+
+const FeedScreen = (props: IFeedScreenProps) => {
   return (
     <View>
       <Text>Feed Screen</Text>
