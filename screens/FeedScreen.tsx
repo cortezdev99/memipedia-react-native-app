@@ -13,7 +13,7 @@ const FeedScreen = (props: IFeedScreenProps) => {
     <View>
       <Text>Feed Screen</Text>
 
-      <TouchableOpacity onPress={() => props.navigation.navigate("Search")}>
+      <TouchableOpacity onPress={() => props.navigation.navigate("Account")}>
         <Text>Search</Text>
       </TouchableOpacity>
     </View>
