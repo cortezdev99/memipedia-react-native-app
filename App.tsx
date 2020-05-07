@@ -1,17 +1,11 @@
-import React from 'react';
-import { StyleSheet, View } from 'react-native';
+import React from "react";
 
-import FeedScreen from "./screens/FeedScreen"
+import router from "./utils/router";
+import { createAppContainer } from "react-navigation";
+const AppContainer = createAppContainer(router);
 
 export default function App() {
-  return <View style={styles.container}><FeedScreen /></View>
+  return (
+    <AppContainer />
+  );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
