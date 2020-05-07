@@ -11,12 +11,8 @@ interface IFeedScreenProps {
 
 const FeedScreen = (props: IFeedScreenProps) => {
   return (
-    <Container>
+    <Container navigate={props.navigation.navigate}>
       <Text>Feed Screen</Text>
-
-      <TouchableOpacity onPress={() => props.navigation.navigate("Search")}>
-        <Text>Search</Text>
-      </TouchableOpacity>
     </Container>
   )
 }

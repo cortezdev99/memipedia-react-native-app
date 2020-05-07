@@ -3,9 +3,15 @@ import { Text, View } from 'react-native';
 
 import Container from '../components/layouts/Container'
 
-const SearchScreen = () => {
+interface ISearchScreenProps {
+  navigation: {
+    navigate: (arg: string) => void;
+  }
+}
+
+const SearchScreen = (props: ISearchScreenProps) => {
   return (
-    <Container>
+    <Container navigate={props.navigation.navigate}>
       <Text>Search Screen</Text>
     </Container>
   )

@@ -1,16 +1,18 @@
 import React from 'react';
-import { View, Text } from 'react-native';
+import { View } from 'react-native';
+
+import BottomTabBar from '../navigation/BottomTabBar'
 
 interface IContainerProps {
   children: any;
+  navigate: (arg: string) => void;
 }
 
 export default (props: IContainerProps) => {
   return (
     <View>
-      <Text>I'm in the container</Text>
-
       {props.children}
+      <BottomTabBar navigate={props.navigate} />
     </View>
   )
 }
