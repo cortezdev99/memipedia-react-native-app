@@ -1,9 +1,12 @@
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, TextInput } from 'react-native';
+import axios from 'axios'
 
 import textInputStyles from "../../styles/forms/textInputStyles"
 const { textFieldWrapper, textField } = textInputStyles;
 import authScreenStyles from '../../styles/stacks/auth/authScreenStyles'
+
+const apiEndPoint = "https://michaelcortez.devcamp.space/memipedia/memipedia_user_token"
 
 export default () => {
   const [formToShow, setFormToShow] = useState("LOGIN");
@@ -32,6 +35,18 @@ export default () => {
     } else if (formToShow === "REGISTER") {
       return "Register"
     }
+  }
+
+  const handleSubmit = () => {
+    const params = {
+      auth: {
+        email: email,
+        password: password
+      }
+    }
+    axios.post(apiEndPoint, params).then((resp) => {
+      console.log("Response from handle submit", resp.data)
+    }).catch(err => console.log("error getting token", err))
   }
 
   return (
@@ -63,6 +78,10 @@ export default () => {
 
       <TouchableOpacity onPress={handleAuthTypePress}>
         <Text style={{ color: "white" }}>{screenTypeText()}</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity onPress={handleSubmit}>
+        <Text style={{ color: "white" }}>{handleHeaderText()}</Text>
       </TouchableOpacity>
     </View>
   )
