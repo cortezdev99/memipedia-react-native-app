@@ -1,4 +1,5 @@
 import { StyleSheet } from 'react-native';
+import Constants from "expo-constants"
 import { dark } from '../../colors';
 
 export default StyleSheet.create({
@@ -6,6 +7,6 @@ export default StyleSheet.create({
     backgroundColor: dark,
     padding: 15,
     height: "100%",
-    marginTop: 100
+    marginTop: Constants.statusBarHeight
   }
 })

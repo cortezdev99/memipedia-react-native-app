@@ -35,7 +35,7 @@ export default (props: IAuthScreenProps) => {
     }
   }
 
-  const handleHeaderText = () => {
+  const handleButtonText = () => {
     if (formToShow === "LOGIN") {
       return "Login"
     } else if (formToShow === "REGISTER") {
@@ -68,8 +68,6 @@ export default (props: IAuthScreenProps) => {
 
   return (
     <View style={authScreenStyles.container}>
-      <Text style={{ color: "white" }}>{handleHeaderText()}</Text>
-
       <View style={textFieldWrapper}>
         <TextInput
           placeholder='Email'
@@ -93,7 +91,7 @@ export default (props: IAuthScreenProps) => {
         />
       </View>
 
-      <TouchableOpacity onPress={handleAuthTypePress}>
+      <TouchableOpacity onPress={handleAuthTypePress} style={{marginTop: 10, marginBottom: 20 }}>
         <Text style={{ color: "white" }}>{screenTypeText()}</Text>
       </TouchableOpacity>
 
@@ -101,7 +99,7 @@ export default (props: IAuthScreenProps) => {
         isSubmitting ? (
           <Button text={"Submitting..."} onPress={handleSubmit} disabled={true}/>
         ) : (
-          <Button text={handleHeaderText()} onPress={handleSubmit} />
+          <Button text={handleButtonText()} onPress={handleSubmit} />
         )
       }
     </View>
