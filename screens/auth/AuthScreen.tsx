@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, TextInput } from 'react-native';
-import axios from 'axios'
 
 import textInputStyles from "../../styles/forms/textInputStyles"
 const { textFieldWrapper, textField } = textInputStyles;
 import authScreenStyles from '../../styles/stacks/auth/authScreenStyles'
 
-const apiEndPoint = "https://michaelcortez.devcamp.space/memipedia/memipedia_user_token"
+import API from "../../utils/api"
 
 export default () => {
   const [formToShow, setFormToShow] = useState("LOGIN");
@@ -44,7 +43,7 @@ export default () => {
         password: password
       }
     }
-    axios.post(apiEndPoint, params).then((resp) => {
+    API.post("memipedia_user_token", params).then((resp) => {
       console.log("Response from handle submit", resp.data)
     }).catch(err => console.log("error getting token", err))
   }
