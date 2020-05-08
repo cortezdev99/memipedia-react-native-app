@@ -7,7 +7,13 @@ import authScreenStyles from '../../styles/stacks/auth/authScreenStyles'
 
 import API from "../../utils/api"
 
-export default () => {
+interface IAuthScreenProps {
+  navigation: {
+    navigate: (arg: string) => void;
+  }
+}
+
+export default (props: IAuthScreenProps) => {
   const [formToShow, setFormToShow] = useState("LOGIN");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -44,8 +50,12 @@ export default () => {
       }
     }
     API.post("memipedia_user_token", params).then((resp) => {
-      console.log("Response from handle submit", resp.data)
-    }).catch(err => console.log("error getting token", err))
+      if (resp.data.jwt) {
+        props.navigation.navigate("Feed")
+      } else {
+        alert("It looks like you typed in the wrong email or password, please try again")
+      }
+    }).catch(err => alert("It looks like you typed in the wrong email or password, please try again"))
   }
 
   return (
