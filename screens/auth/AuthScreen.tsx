@@ -4,7 +4,8 @@ import { dark } from '../../styles/colors';
 
 export default () => {
   const [formToShow, setFormToShow] = useState("LOGIN");
-  const [email, setEmeail] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
   const screenTypeText = () => {
     if (formToShow === "LOGIN") {
@@ -38,7 +39,7 @@ export default () => {
         <TextInput
           placeholder='Email'
           value={email}
-          onChangeText={(val) => setEmeail(val)}
+          onChangeText={(val) => setEmail(val)}
           style={{
             backgroundColor: "white",
             borderRadius: 20,
@@ -47,6 +48,23 @@ export default () => {
           }}
           autoCapitalize="none"
           spellCheck={false}
+        />
+      </View>
+
+      <View style={{ marginTop: 20, marginBottom: 20 }}>
+        <TextInput
+          placeholder='Password'
+          value={password}
+          onChangeText={(val) => setPassword(val)}
+          style={{
+            backgroundColor: "white",
+            borderRadius: 20,
+            height: 40,
+            paddingLeft: 20,
+          }}
+          autoCapitalize="none"
+          spellCheck={false}
+          secureTextEntry={true}
         />
       </View>
 
