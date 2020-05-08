@@ -6,6 +6,7 @@ const { textFieldWrapper, textField } = textInputStyles;
 import authScreenStyles from '../../styles/stacks/auth/authScreenStyles'
 import API from "../../utils/api"
 import Button from '../../components/helpers/Button'
+import { formatErrors } from '../../utils/textFormatters'
 
 interface IAuthScreenProps {
   navigation: {
@@ -76,7 +77,7 @@ export default (props: IAuthScreenProps) => {
       if (resp.data.memipedia_user) {
         props.navigation.navigate("Feed")
       } else {
-        alert("Error creating user account")
+        alert(`Error creating user account: ${formatErrors(resp.data.errors)}`)
       }
 
       setIsSubmitting(false)
