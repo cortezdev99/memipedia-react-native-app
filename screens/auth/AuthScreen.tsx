@@ -4,8 +4,8 @@ import { View, Text, TouchableOpacity, TextInput } from 'react-native';
 import textInputStyles from "../../styles/forms/textInputStyles"
 const { textFieldWrapper, textField } = textInputStyles;
 import authScreenStyles from '../../styles/stacks/auth/authScreenStyles'
-
 import API from "../../utils/api"
+import Button from '../../components/helpers/Button'
 
 interface IAuthScreenProps {
   navigation: {
@@ -17,6 +17,7 @@ export default (props: IAuthScreenProps) => {
   const [formToShow, setFormToShow] = useState("LOGIN");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const screenTypeText = () => {
     if (formToShow === "LOGIN") {
@@ -43,6 +44,8 @@ export default (props: IAuthScreenProps) => {
   }
 
   const handleSubmit = () => {
+    setIsSubmitting(true)
+
     const params = {
       auth: {
         email: email,
@@ -55,7 +58,12 @@ export default (props: IAuthScreenProps) => {
       } else {
         alert("It looks like you typed in the wrong email or password, please try again")
       }
-    }).catch(err => alert("It looks like you typed in the wrong email or password, please try again"))
+
+      setIsSubmitting(false)
+    }).catch(err => {
+        setIsSubmitting(false)
+        alert("It looks like you typed in the wrong email or password, please try again")
+    })
   }
 
   return (
@@ -89,9 +97,13 @@ export default (props: IAuthScreenProps) => {
         <Text style={{ color: "white" }}>{screenTypeText()}</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity onPress={handleSubmit}>
-        <Text style={{ color: "white" }}>{handleHeaderText()}</Text>
-      </TouchableOpacity>
+      {
+        isSubmitting ? (
+          <Button text={"Submitting..."} onPress={handleSubmit} disabled={true}/>
+        ) : (
+          <Button text={handleHeaderText()} onPress={handleSubmit} />
+        )
+      }
     </View>
   )
 }
