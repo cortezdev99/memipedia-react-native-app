@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, TextInput, ScrollView } from 'react-native';
+import * as SecureStore from 'expo-secure-store'
 
 import textInputStyles from "../../styles/forms/textInputStyles"
 const { textFieldWrapper, textField } = textInputStyles;
@@ -51,8 +52,9 @@ export default (props: IAuthScreenProps) => {
         password: password
       }
     }
-    API.post("memipedia_user_token", params).then((resp) => {
+    API.post("memipedia_user_token", params).then(async resp => {
       if (resp.data.jwt) {
+        await SecureStore.setItemAsync("memipedia_secure_token", resp.data.jwt)
         props.navigation.navigate("Feed")
       } else {
         alert("It looks like you typed in the wrong email or password, please try again")
