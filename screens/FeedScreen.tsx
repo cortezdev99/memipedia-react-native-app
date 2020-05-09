@@ -5,6 +5,7 @@ import * as SecureStore from 'expo-secure-store'
 import Container from '../components/layouts/Container'
 import api from '../utils/api';
 import PostItem from '../components/posts/PostItem'
+import baseStyles from '../styles/common/baseStyles';
 
 interface IFeedScreenProps {
   navigation: {
@@ -42,7 +43,7 @@ const FeedScreen = (props: IFeedScreenProps) => {
         {isLoading ? (
           <ActivityIndicator />
         ) : (
-          <ScrollView>
+          <ScrollView style={baseStyles.containerWidthBottomTabBar}>
             {posts.map((post) => {
               const { id } = post
               return (
