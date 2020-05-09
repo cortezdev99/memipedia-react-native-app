@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { View, Text, TouchableOpacity, TextInput, ScrollView } from 'react-native';
 import * as SecureStore from 'expo-secure-store'
 
@@ -8,6 +8,7 @@ import authScreenStyles from '../../styles/stacks/auth/authScreenStyles'
 import API from "../../utils/api"
 import Button from '../../components/helpers/Button'
 import { formatErrors } from '../../utils/textFormatters'
+import CurrentUserContext from '../../contexts/CurrentUserContext';
 
 interface IAuthScreenProps {
   navigation: {
@@ -20,6 +21,8 @@ export default (props: IAuthScreenProps) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const { getUser } = useContext(CurrentUserContext)
 
   const screenTypeText = () => {
     if (formToShow === "LOGIN") {
@@ -55,11 +58,11 @@ export default (props: IAuthScreenProps) => {
     API.post("memipedia_user_token", params).then(async resp => {
       if (resp.data.jwt) {
         await SecureStore.setItemAsync("memipedia_secure_token", resp.data.jwt)
+        getUser()
         props.navigation.navigate("Feed")
       } else {
         alert("It looks like you typed in the wrong email or password, please try again")
       }
-
       setIsSubmitting(false)
     }).catch(err => {
         setIsSubmitting(false)
@@ -75,9 +78,8 @@ export default (props: IAuthScreenProps) => {
       }
     }
     API.post("memipedia_users", params).then((resp) => {
-      console.log(resp.data)
       if (resp.data.memipedia_user) {
-        props.navigation.navigate("Feed")
+        handleLogin();
       } else {
         alert(`Error creating user account: ${formatErrors(resp.data.errors)}`)
       }
