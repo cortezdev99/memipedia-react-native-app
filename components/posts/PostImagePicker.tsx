@@ -1,31 +1,24 @@
-import * as React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button, Image, View } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import Constants from 'expo-constants';
 import * as Permissions from 'expo-permissions';
 
-export default class ImagePickerExample extends React.Component {
-  state = {
-    image: null,
-  };
+interface IPostImagePickerProps {
+  setPostImage: (arg: any) => void
+}
 
-  render() {
-    let { image } = this.state;
+export default (props: IPostImagePickerProps) => {
+  const [image, setImage] = useState(null)
 
-    return (
-      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-        <Button title="Pick an image from camera roll" onPress={this._pickImage} />
-        {image && <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />}
-      </View>
-    );
-  }
+  useEffect(() => {
+    getPermissionAsync();
+  }, [])
 
-  componentDidMount() {
-    this.getPermissionAsync();
-  }
+  const getPermissionAsync = async () => {
+    let iosConstant: any = Constants.platform.ios
 
-  getPermissionAsync = async () => {
-    if (Constants.platform.ios) {
+    if (iosConstant) {
       const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
       if (status !== 'granted') {
         alert('Sorry, we need camera roll permissions to make this work!');
@@ -33,21 +26,28 @@ export default class ImagePickerExample extends React.Component {
     }
   };
 
-  _pickImage = async () => {
+  const pickImage = async () => {
     try {
-      let result = await ImagePicker.launchImageLibraryAsync({
+      let result: any = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.All,
         allowsEditing: true,
         aspect: [4, 3],
         quality: 1,
       });
-      if (!result.cancelled) {
-        this.setState({ image: result.uri });
-      }
 
-      console.log(result);
+      if (!result.cancelled) {
+        setImage(result.uri);
+        props.setPostImage(result.uri)
+      }
     } catch (E) {
       console.log(E);
     }
   };
+
+  return (
+    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+      <Button title="Pick an image from camera roll" onPress={pickImage} />
+      {image && <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />}
+    </View>
+  );
 }
