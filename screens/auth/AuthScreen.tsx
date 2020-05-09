@@ -59,11 +59,12 @@ export default (props: IAuthScreenProps) => {
       if (resp.data.jwt) {
         await SecureStore.setItemAsync("memipedia_secure_token", resp.data.jwt)
         getUser()
+        setIsSubmitting(false)
         props.navigation.navigate("Feed")
       } else {
         alert("It looks like you typed in the wrong email or password, please try again")
+        setIsSubmitting(false)
       }
-      setIsSubmitting(false)
     }).catch(err => {
         setIsSubmitting(false)
         alert("It looks like you typed in the wrong email or password, please try again")
@@ -81,10 +82,10 @@ export default (props: IAuthScreenProps) => {
       if (resp.data.memipedia_user) {
         handleLogin();
       } else {
+        setIsSubmitting(false)
         alert(`Error creating user account: ${formatErrors(resp.data.errors)}`)
       }
 
-      setIsSubmitting(false)
     }).catch(err => {
         setIsSubmitting(false)
         alert("Error creating user account")
@@ -123,6 +124,7 @@ export default (props: IAuthScreenProps) => {
           autoCapitalize="none"
           spellCheck={false}
           secureTextEntry={true}
+          onSubmitEditing={handleSubmit}
         />
       </View>
 
