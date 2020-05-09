@@ -8,8 +8,9 @@ import AccountScreen from '../screens/AccountScreen';
 import PostFormScreen from '../screens/PostFormScreen';
 import HeaderLogo from "../components/images/HeaderLogo";
 import AuthScreen from "../screens/auth/AuthScreen"
-
+import AuthLoadingScreen from "../screens/auth/AuthLoadingScreen";
 import { dark } from '../styles/colors'
+
 
 const AppStack = createStackNavigator(
   {
@@ -45,11 +46,12 @@ const AuthStack = createStackNavigator(
 export default createAppContainer(
   createSwitchNavigator(
     {
+      AuthLoading: AuthLoadingScreen,
       App: AppStack,
-      Auth: AuthStack
+      Auth: AuthStack,
     },
     {
-      initialRouteName: "Auth"
+      initialRouteName: "AuthLoading"
     }
   )
 );
