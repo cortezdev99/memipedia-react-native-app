@@ -1,30 +1,53 @@
-import React, { useState } from 'react'
-import { View, TextInput, Text } from 'react-native'
+import React, { useState } from "react";
+import { View, TextInput, Text } from "react-native";
+import * as SecureStore from "expo-secure-store";
 
-import Button from '../components/helpers/Button'
-import PostImagePicker from '../components/posts/PostImagePicker'
+import api from "../utils/api";
+import PostImagePicker from "../components/posts/PostImagePicker";
+import Button from "../components/helpers/Button";
 
-const PostFormScreen = () => {
-  const [name, setName] = useState("")
-  const [content, setContent] = useState("")
-  const [postImage, setPostImage] = useState(null)
+export default () => {
+  const [name, setName] = useState("");
+  const [content, setContent] = useState("");
+  const [postImage, setPostImage] = useState(null);
 
   const buildForm = () => {
     let formData = new FormData();
 
-    formData.append("post[name]", name)
-    formData.append("post[content]", content)
+    formData.append("post[name]", name);
+    formData.append("post[content]", content);
 
-    const uriParts = postImage.splite(".");
-    const fileType = uriParts[uriParts.length - 1]
+    const uriParts = postImage.split(".");
+    const fileType = uriParts[uriParts.length - 1];
 
     formData.append("post[post_image]", {
       // @ts-ignore
       uri: postImage,
       name: `photo.${fileType}`,
-      type: `image/${fileType}`
-    })
-  }
+      type: `image/${fileType}`,
+    });
+
+    return formData;
+  };
+
+  const handleSubmit = async () => {
+    const token = await SecureStore.getItemAsync("memipedia_secure_token");
+
+    api
+      .post("memipedia_posts", buildForm(), {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          Accept: "application/json",
+          "Content-Type": "multipart/form-data",
+        },
+      })
+      .then((response) => {
+        console.log("res from creating a new post", response.data);
+      })
+      .catch((error) => {
+        console.log("error from creating new post", error);
+      });
+  };
 
   return (
     <View style={{ height: "100%" }}>
@@ -38,26 +61,19 @@ const PostFormScreen = () => {
         placeholder="Add meme explanation here"
         value={content}
         onChangeText={(val) => setContent(val)}
-        style={{ borderWidth: 2, borderColor: "black"}}
-        multiline={true}
+        style={{ borderWidth: 2, borderColor: "black" }}
+        multiline
       />
 
       <View style={{ marginTop: 40, height: 100 }}>
         <PostImagePicker setPostImage={setPostImage} />
       </View>
 
-      <Button
-         text="Submit"
-         onPress={() => console.log("Submitting...")}
-      />
+      <Button text="Submit" onPress={handleSubmit} />
 
       <View>
-        <Text>
-          {postImage ? postImage : null}
-        </Text>
+        <Text>{postImage ? postImage : null}</Text>
       </View>
     </View>
-  )
-}
-
-export default PostFormScreen;
+  );
+};
