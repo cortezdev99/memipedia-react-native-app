@@ -134,7 +134,7 @@ export default (props: IAuthScreenProps) => {
 
       {
         isSubmitting ? (
-          <Button text={"Submitting..."} onPress={handleSubmit} disabled={true}/>
+          <Button text={"Submitting..."} disabled={true}/>
         ) : (
           <Button text={handleButtonText()} onPress={handleSubmit} />
         )
