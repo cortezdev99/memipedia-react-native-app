@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, ActivityIndicator, ScrollView, TouchableOpacity } from 'react-native';
+import { View } from 'react-native';
 import * as SecureStore from 'expo-secure-store'
 
 import Container from '../components/layouts/Container'
@@ -23,6 +23,8 @@ const FeedScreen = (props: IFeedScreenProps) => {
   const getPosts = async () => {
     const token = await SecureStore.getItemAsync("memipedia_secure_token");
 
+    setIsLoading(true)
+
     api.get("memipedia_posts", {
       headers: {
         Authorization: `Bearer ${token}`
@@ -39,11 +41,7 @@ const FeedScreen = (props: IFeedScreenProps) => {
   return (
     <Container navigate={props.navigation.navigate}>
       <View>
-        {isLoading ? (
-          <ActivityIndicator />
-        ) : (
-          <PostList posts={posts} navigate={props.navigation.navigate} />
-        )}
+        <PostList isLoading={isLoading} getPosts={getPosts} posts={posts} navigate={props.navigation.navigate} />
       </View>
     </Container>
   )
