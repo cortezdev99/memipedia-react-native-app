@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Text, View, TextInput, TouchableOpacity } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, ActivityIndicator } from 'react-native';
 import * as SecureStore from 'expo-secure-store'
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
@@ -17,9 +17,13 @@ interface ISearchScreenProps {
 const SearchScreen = (props: ISearchScreenProps) => {
   const [query, setQuery] = useState("");
   const [posts, setPosts] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [emptyQuery, setEmptyQuery] = useState(false)
 
   const handleSearch = async (query: any) => {
     const token = await SecureStore.getItemAsync("memipedia_secure_token");
+    setIsLoading(true)
+    setEmptyQuery(false)
 
     const params = {
       query
@@ -32,10 +36,17 @@ const SearchScreen = (props: ISearchScreenProps) => {
     api.get("memipedia_queries", {
       params,
       headers
-    }).then((resp) => {
+    }).then((resp) => { 
+      if (resp.data.memipedia_posts.length === 0) {
+        setEmptyQuery(true)
+      }
+      
       setPosts(resp.data.memipedia_posts)
+      setIsLoading(false)
+
     }).catch((err) => {
-      console.log('Error getting query', err)
+      setIsLoading(false)
+      alert("Error fetching data")
     })
   }
 
@@ -60,10 +71,26 @@ const SearchScreen = (props: ISearchScreenProps) => {
       </TouchableOpacity>
     </View>
   )
+
+  const queryToBeRendered = () => {
+    if (isLoading) {
+      return <ActivityIndicator />
+    } else if (emptyQuery) {
+      return (
+        <View style={{ paddingRight: 15, paddingLeft: 15 }}>
+          <Text style={{ color: "white" }}>Sorry, no posts match your search...</Text>
+        </View>
+      )
+    } else if (posts && posts.length > 0) {
+      return <PostList posts={posts} navigate={props.navigation.navigate}/>
+    } else {
+      return null
+    }
+  }
   return (
     <Container navigate={props.navigation.navigate}>
       {searchBar}
-      <PostList posts={posts} navigate={props.navigation.navigate}/>
+      { queryToBeRendered() }
     </Container>
   )
 }
