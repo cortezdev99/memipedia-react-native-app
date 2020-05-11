@@ -4,8 +4,7 @@ import * as SecureStore from 'expo-secure-store'
 
 import Container from '../components/layouts/Container'
 import api from '../utils/api';
-import PostItem from '../components/posts/PostItem'
-import baseStyles from '../styles/common/baseStyles';
+import PostList from '../components/posts/PostList';
 
 interface IFeedScreenProps {
   navigation: {
@@ -37,26 +36,13 @@ const FeedScreen = (props: IFeedScreenProps) => {
     })
   }
 
-  const handlePostPress = (post: any) => {
-    props.navigation.navigate("PostDetail", {post})
-  }
-
   return (
     <Container navigate={props.navigation.navigate}>
       <View>
         {isLoading ? (
           <ActivityIndicator />
         ) : (
-          <ScrollView style={baseStyles.containerWidthBottomTabBar}>
-            {posts.map((post) => {
-              const { id } = post
-              return (
-                <TouchableOpacity key={id} onPress={() => handlePostPress(post)}>
-                  <PostItem post={post} />
-                </TouchableOpacity>
-              )
-            })}
-          </ScrollView>
+          <PostList posts={posts} navigate={props.navigation.navigate} />
         )}
       </View>
     </Container>
