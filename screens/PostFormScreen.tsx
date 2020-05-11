@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { View, TextInput, ScrollView } from "react-native";
 import * as SecureStore from "expo-secure-store";
 
@@ -23,12 +23,14 @@ interface IPostFormScreenProps {
 }
 
 export default (props: IPostFormScreenProps) => {
+  const imagePickerRef: any = useRef();
   const [name, setName] = useState("");
   const [content, setContent] = useState("");
   const [postImage, setPostImage] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const setBaseState = () => {
+    imagePickerRef.current.clearImage();
     setName("");
     setContent("");
     setPostImage(null);
@@ -70,8 +72,8 @@ export default (props: IPostFormScreenProps) => {
         console.log("res from creating a new post", response.data);
         
         if (response.data.memipedia_post) {
-          setBaseState();
           props.navigation.navigate("PostDetail", {post: response.data.memipedia_post})
+          setBaseState();
         } else {
           setIsSubmitting(false)
           alert("There was an issue creating the post, all fields are required, and only images are allowed.")
@@ -86,7 +88,7 @@ export default (props: IPostFormScreenProps) => {
   return (
     <ScrollView style={container}>
       <View style={formGrid}>
-        <PostImagePicker setPostImage={setPostImage} />
+        <PostImagePicker ref={imagePickerRef} setPostImage={setPostImage} />
 
         <View style={textInputWrapper}>
           <TextInput
