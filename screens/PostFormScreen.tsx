@@ -1,10 +1,20 @@
 import React, { useState } from "react";
-import { View, TextInput, Text } from "react-native";
+import { View, TextInput, ScrollView } from "react-native";
 import * as SecureStore from "expo-secure-store";
 
 import api from "../utils/api";
 import PostImagePicker from "../components/posts/PostImagePicker";
 import Button from "../components/helpers/Button";
+import postFormStyles from "../styles/stacks/posts/postFormStyles";
+
+const {
+  container,
+  formGrid,
+  textInputWrapper,
+  inputElement,
+  textAreaElement,
+  buttonWrapper
+} = postFormStyles
 
 interface IPostFormScreenProps {
   navigation: {
@@ -66,32 +76,38 @@ export default (props: IPostFormScreenProps) => {
   };
 
   return (
-    <View style={{ height: "100%" }}>
-      <TextInput
-        placeholder="Name"
-        value={name}
-        onChangeText={(val) => setName(val)}
-      />
-
-      <TextInput
-        placeholder="Add meme explanation here"
-        value={content}
-        onChangeText={(val) => setContent(val)}
-        style={{ borderWidth: 2, borderColor: "black" }}
-        multiline
-      />
-
-      <View style={{ marginTop: 40, height: 100 }}>
+    <ScrollView style={container}>
+      <View style={formGrid}>
         <PostImagePicker setPostImage={setPostImage} />
+
+        <View style={textInputWrapper}>
+          <TextInput
+            placeholder="Name"
+            value={name}
+            onChangeText={(val) => setName(val)}
+            style={inputElement}
+            />
+
+          <TextInput
+            placeholder="Add meme explanation here"
+            value={content}
+            onChangeText={(val) => setContent(val)}
+            multiline
+            style={[inputElement, textAreaElement]}
+            />
+        </View>
       </View>
 
-      {
-        isSubmitting ? (
-          <Button text="Submitting..." disabled={true} />
-        ) : (
-          <Button text="Submit" onPress={handleSubmit} />
-        )
-      }
-    </View>
+
+      <View style={buttonWrapper}>
+        {
+          isSubmitting ? (
+            <Button text="Submitting..." disabled={true} />
+          ) : (
+            <Button text="Submit" onPress={handleSubmit} />
+          )
+        }
+      </View>
+    </ScrollView>
   );
 };
